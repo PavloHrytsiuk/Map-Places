@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MapMarkers</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="button_text">Show in map</string>
+</resources>
