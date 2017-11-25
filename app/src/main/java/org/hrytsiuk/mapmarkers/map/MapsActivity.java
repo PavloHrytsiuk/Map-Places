@@ -1,7 +1,6 @@
 package org.hrytsiuk.mapmarkers.map;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -14,14 +13,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.hrytsiuk.mapmarkers.R;
+import org.hrytsiuk.mapmarkers.base.BaseActivity;
 import org.hrytsiuk.mapmarkers.places.Place;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public final class MapsActivity extends BaseActivity implements OnMapReadyCallback {
 
-    private GoogleMap googleMap;
     private List<Place> places;
     private ArrayList<Integer> checkedPlaces;
 
@@ -44,26 +43,28 @@ public final class MapsActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(final GoogleMap gMap) {
 
-        googleMap = gMap;
-        googleMap.setTrafficEnabled(true);
-        googleMap.setIndoorEnabled(true);
-        googleMap.setBuildingsEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        gMap.setTrafficEnabled(true);
+        gMap.setIndoorEnabled(true);
+        gMap.setBuildingsEnabled(true);
+        gMap.getUiSettings().setZoomControlsEnabled(true);
+        gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         final LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Integer x : checkedPlaces) {
             final LatLng placeLocation = new LatLng(places.get(x).getLatitude(),
                     places.get(x).getLongitude());
-            final Marker marker = googleMap.addMarker(new MarkerOptions().position(placeLocation)
+            final Marker marker = gMap.addMarker(new MarkerOptions().position(placeLocation)
                     .title(places.get(x).getTitle()));
-
             builder.include(marker.getPosition());
         }
-        final LatLngBounds bounds = builder.build();
-        int padding = 250;
-        final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        googleMap.moveCamera(cu);
-        googleMap.animateCamera(cu);
+        try {
+            final LatLngBounds bounds = builder.build();
+            final int padding = 250;
+            final CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+            gMap.moveCamera(cameraUpdate);
+            gMap.animateCamera(cameraUpdate);
+        } catch (Exception e) {
+            showToast(e.getMessage());
+        }
     }
 }

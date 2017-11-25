@@ -31,10 +31,8 @@ public final class MainActivity extends BaseActivity implements PlaceView, ItemC
     @BindView(R.id.buttonShow)
     Button button;
 
-    private PlacesAdapter adapter;
     private PlacePresenter presenter;
     private List<Place> places;
-    private Intent intent;
     private HashSet<Integer> checkedPlaces;
 
     private static final String CHECKED_PLACES = "Checked places";
@@ -52,7 +50,7 @@ public final class MainActivity extends BaseActivity implements PlaceView, ItemC
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         checkedPlaces = new HashSet<>();
-        intent = new Intent(MainActivity.this, MapsActivity.class);
+        final Intent intent = new Intent(MainActivity.this, MapsActivity.class);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +77,7 @@ public final class MainActivity extends BaseActivity implements PlaceView, ItemC
     @Override
     public void loadPlaces(@NonNull final List<Place> places) {
         this.places = places;
-        adapter = new PlacesAdapter(places, this);
+        PlacesAdapter adapter = new PlacesAdapter(places, this);
         recyclerView.setAdapter(adapter);
     }
 

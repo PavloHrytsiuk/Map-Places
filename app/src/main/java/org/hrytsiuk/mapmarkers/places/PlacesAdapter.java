@@ -33,7 +33,7 @@ public final class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Pers
     @Override
     public PersonViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         return new PersonViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.place_item, parent, false),
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.item_place, parent, false),
                 listener);
     }
 
@@ -51,13 +51,13 @@ public final class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Pers
 
     static final class PersonViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.cv)
+        @BindView(R.id.cardView)
         CardView cardView;
-        @BindView(R.id.place_photo)
+        @BindView(R.id.placePhoto)
         ImageView placePhoto;
-        @BindView(R.id.place_title)
+        @BindView(R.id.placeTitle)
         TextView placeTitle;
-        @BindView(R.id.place_description)
+        @BindView(R.id.placeDescription)
         TextView placeDescription;
         @BindView(R.id.checkBox)
         CheckBox checkBox;

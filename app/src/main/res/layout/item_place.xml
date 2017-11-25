@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/cv"
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -15,9 +15,9 @@
             android:padding="@dimen/default_margin">
 
             <ImageView
-                android:id="@+id/place_photo"
-                android:layout_width="144dp"
-                android:layout_height="128dp"
+                android:id="@+id/placePhoto"
+                android:layout_width="@dimen/width_photo"
+                android:layout_height="@dimen/height_photo"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginEnd="@dimen/default_margin"
@@ -25,21 +25,22 @@
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
-                android:id="@+id/place_title"
+                android:id="@+id/placeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/place_photo"
+                android:layout_toEndOf="@+id/placePhoto"
+                android:textColor="@color/colorDark"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textSize="@dimen/large_text_size" />
 
             <TextView
-                android:id="@+id/place_description"
+                android:id="@+id/placeDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/place_title"
-                android:layout_toEndOf="@+id/place_photo"
+                android:layout_below="@+id/placeTitle"
+                android:layout_toEndOf="@+id/placePhoto"
                 android:ellipsize="end"
                 android:maxLines="6"
                 android:textSize="@dimen/normal_text_size" />

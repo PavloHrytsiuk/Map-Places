@@ -25,7 +25,7 @@ public final class Place implements Parcelable {
 
     }
 
-    protected Place(Parcel in) {
+    protected Place(final Parcel in) {
         objectId = in.readInt();
         title = in.readString();
         description = in.readString();
@@ -36,12 +36,12 @@ public final class Place implements Parcelable {
 
     public static final Creator<Place> CREATOR = new Creator<Place>() {
         @Override
-        public Place createFromParcel(Parcel in) {
+        public Place createFromParcel(final Parcel in) {
             return new Place(in);
         }
 
         @Override
-        public Place[] newArray(int size) {
+        public Place[] newArray(final int size) {
             return new Place[size];
         }
     };
@@ -76,7 +76,7 @@ public final class Place implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(final Parcel parcel, final int i) {
         parcel.writeInt(objectId);
         parcel.writeString(title);
         parcel.writeString(description);
