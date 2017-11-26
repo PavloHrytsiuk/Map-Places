@@ -16,6 +16,7 @@ import org.hrytsiuk.mapmarkers.map.MapsActivity;
 import org.hrytsiuk.mapmarkers.places.presentation.PlacePresenter;
 import org.hrytsiuk.mapmarkers.places.presentation.PlacePresenterImpl;
 import org.hrytsiuk.mapmarkers.places.presentation.PlaceView;
+import org.hrytsiuk.mapmarkers.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,11 +33,10 @@ public final class MainActivity extends BaseActivity implements PlaceView, ItemC
     Button button;
 
     private PlacePresenter presenter;
-    private List<Place> places;
-    private HashSet<Integer> checkedPlaces;
+    private HashSet<Place> checkedPlaces;
+    private PlacesAdapter adapter;
 
     private static final String CHECKED_PLACES = "Checked places";
-    private static final String LIST_PLACES = "List_places";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -44,28 +44,28 @@ public final class MainActivity extends BaseActivity implements PlaceView, ItemC
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        presenter = new PlacePresenterImpl();
-        presenter.attachView(this);
-        presenter.fetchPlaces();
+        if (Utils.isNetworkConnected(this)) {
+            presenter = new PlacePresenterImpl();
+            presenter.attachView(this);
+            presenter.fetchPlaces();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        checkedPlaces = new HashSet<>();
-        final Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            checkedPlaces = new HashSet<>();
+            final Intent intent = new Intent(MainActivity.this, MapsActivity.class);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(@NonNull final View view) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(LIST_PLACES, (ArrayList<? extends Parcelable>) places);
-                intent.putExtras(bundle);
-                ArrayList<Integer> list = new ArrayList<>();
-                for (Integer x : checkedPlaces) {
-                    list.add(x);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(@NonNull final View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(CHECKED_PLACES, new ArrayList<Parcelable>(checkedPlaces));
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
-                intent.putIntegerArrayListExtra(CHECKED_PLACES, list);
-                startActivity(intent);
-            }
-        });
+            });
+        } else {
+            button.setVisibility(View.GONE);
+            showToast(getString(R.string.message_no_connection));
+        }
     }
 
     @Override
@@ -76,18 +76,17 @@ public final class MainActivity extends BaseActivity implements PlaceView, ItemC
 
     @Override
     public void loadPlaces(@NonNull final List<Place> places) {
-        this.places = places;
-        PlacesAdapter adapter = new PlacesAdapter(places, this);
+        adapter = new PlacesAdapter(places, this);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void itemChecked(final int position) {
-        checkedPlaces.add(position);
+        checkedPlaces.add(adapter.getItem(position));
     }
 
     @Override
     public void itemUnchecked(final int position) {
-        checkedPlaces.remove(position);
+        checkedPlaces.remove(adapter.getItem(position));
     }
 }

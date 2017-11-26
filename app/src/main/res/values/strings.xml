@@ -2,4 +2,6 @@
     <string name="app_name">Map Places</string>
     <string name="title_activity_maps">Map</string>
     <string name="button_text">Show in map</string>
+    <string name="message_no_connection">No network connection!</string>
+    <string name="message_no_selected">No selected places!</string>
 </resources>

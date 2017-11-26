@@ -16,16 +16,13 @@ import org.hrytsiuk.mapmarkers.R;
 import org.hrytsiuk.mapmarkers.base.BaseActivity;
 import org.hrytsiuk.mapmarkers.places.Place;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class MapsActivity extends BaseActivity implements OnMapReadyCallback {
 
     private List<Place> places;
-    private ArrayList<Integer> checkedPlaces;
 
     private static final String CHECKED_PLACES = "Checked places";
-    private static final String LIST_PLACES = "List_places";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -36,8 +33,7 @@ public final class MapsActivity extends BaseActivity implements OnMapReadyCallba
         mapFragment.getMapAsync(this);
 
         Bundle bundle = getIntent().getExtras();
-        places = bundle.getParcelableArrayList(LIST_PLACES);
-        checkedPlaces = getIntent().getIntegerArrayListExtra(CHECKED_PLACES);
+        places = bundle.getParcelableArrayList(CHECKED_PLACES);
     }
 
     @Override
@@ -49,22 +45,24 @@ public final class MapsActivity extends BaseActivity implements OnMapReadyCallba
         gMap.getUiSettings().setZoomControlsEnabled(true);
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        final LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Integer x : checkedPlaces) {
-            final LatLng placeLocation = new LatLng(places.get(x).getLatitude(),
-                    places.get(x).getLongitude());
-            final Marker marker = gMap.addMarker(new MarkerOptions().position(placeLocation)
-                    .title(places.get(x).getTitle()));
-            builder.include(marker.getPosition());
-        }
-        try {
+        if (places.isEmpty()) {
+            showToast(getString(R.string.message_no_selected));
+        } else {
+            final LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (Place place : places) {
+                final LatLng placeLocation = new LatLng(place.getLatitude(),
+                        place.getLongitude());
+                final Marker marker = gMap.addMarker(new MarkerOptions().position(placeLocation)
+                        .title(place.getTitle()));
+                builder.include(marker.getPosition());
+            }
             final LatLngBounds bounds = builder.build();
             final int padding = 250;
             final CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             gMap.moveCamera(cameraUpdate);
-            gMap.animateCamera(cameraUpdate);
-        } catch (Exception e) {
-            showToast(e.getMessage());
+            if (bounds.northeast.equals(bounds.southwest)) {
+                gMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+            } else gMap.animateCamera(cameraUpdate);
         }
     }
 }

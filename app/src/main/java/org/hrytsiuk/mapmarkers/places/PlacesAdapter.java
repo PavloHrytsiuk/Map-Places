@@ -49,6 +49,10 @@ public final class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Pers
         return places.size();
     }
 
+    public Place getItem(final int position) {
+        return places.get(position);
+    }
+
     static final class PersonViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.cardView)
