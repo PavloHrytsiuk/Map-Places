@@ -1,6 +1,5 @@
 package org.hrytsiuk.mapmarkers.places;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -10,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import org.hrytsiuk.mapmarkers.R;
 import org.hrytsiuk.mapmarkers.base.BaseActivity;
@@ -46,16 +44,7 @@ public final class MainActivity extends BaseActivity implements PlaceView, ItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        }
-        getSupportActionBar().setCustomView(R.layout.action_bar);
-        TextView title = (TextView) findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
-        title.setText(R.string.title_main_activity);
-
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL));
+        setTitle(getSupportActionBar(), getString(R.string.title_main_activity));
 
         if (Utils.isNetworkConnected(this)) {
             presenter = new PlacePresenterImpl();
@@ -63,6 +52,8 @@ public final class MainActivity extends BaseActivity implements PlaceView, ItemC
             presenter.fetchPlaces();
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.addItemDecoration(new DividerItemDecoration(this,
+                    DividerItemDecoration.VERTICAL));
             checkedPlaces = new HashSet<>();
             final Intent intent = new Intent(MainActivity.this, MapsActivity.class);
 
