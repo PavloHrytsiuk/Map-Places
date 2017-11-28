@@ -1,6 +1,10 @@
 package org.hrytsiuk.mapmarkers.map;
 
+import android.app.ActionBar;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,8 +22,13 @@ import org.hrytsiuk.mapmarkers.places.Place;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public final class MapsActivity extends BaseActivity implements OnMapReadyCallback {
 
+    @BindView(R.id.buttonShowList)
+    Button button;
     private List<Place> places;
 
     private static final String CHECKED_PLACES = "Checked places";
@@ -28,12 +37,28 @@ public final class MapsActivity extends BaseActivity implements OnMapReadyCallba
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        ButterKnife.bind(this);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        }
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        TextView title = (TextView) findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(R.string.title_maps_activity);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         Bundle bundle = getIntent().getExtras();
         places = bundle.getParcelableArrayList(CHECKED_PLACES);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override

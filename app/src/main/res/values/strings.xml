@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Map Places</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="button_text">Show in map</string>
+    <string name="title_maps_activity">Map</string>
+    <string name="title_main_activity">Places</string>
+    <string name="button_text">Show on the map</string>
     <string name="message_no_connection">No network connection!</string>
     <string name="message_no_selected">No selected places!</string>
+    <string name="places_list">List of places</string>
 </resources>
